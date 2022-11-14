@@ -1,5 +1,21 @@
 {
   "nodes": {
+    "kbd-intl-ng-repo": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1543352437,
+        "narHash": "sha256-dh+p7GrWRofEZqmM4RMWljwv4OEdLJvHmkRRA0eSCKA=",
+        "owner": "Duncaen",
+        "repo": "kbd-intl-ng",
+        "rev": "18a20afff7b55f8f85488d93b521eea58031ccd0",
+        "type": "github"
+      },
+      "original": {
+        "owner": "Duncaen",
+        "repo": "kbd-intl-ng",
+        "type": "github"
+      }
+    },
     "nixos": {
       "locked": {
         "lastModified": 1668281765,
@@ -18,6 +34,7 @@
     },
     "root": {
       "inputs": {
+        "kbd-intl-ng-repo": "kbd-intl-ng-repo",
         "nixos": "nixos"
       }
     }
