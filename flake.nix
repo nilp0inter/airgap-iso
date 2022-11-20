@@ -17,9 +17,7 @@
           gzip $out/share/keymaps/us-intl.map
         '';
       });
-    airgap-menu = pkgs.writeScriptBin "airgap" ''
-      ${pkgs.just}/bin/just --justfile ${./airgap-menu.just} "$@"
-    '';
+    airgap-menu = pkgs.callPackage ./airgap {};
   in {
     nixosConfigurations = {
       airgap = nixos.lib.nixosSystem {

@@ -1,8 +1,9 @@
-from invoke import task
+from invoke import task, run
 
 @task
-def unit(c):
-    print("Running unit tests!")
+def game(c):
+    run("ninvaders", pty=True)
+
 
 @task
 def integration(c):
