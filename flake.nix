@@ -17,6 +17,9 @@
           gzip $out/share/keymaps/us-intl.map
         '';
       });
+    airgap-menu = pkgs.writeScriptBin "airgap" ''
+      ${pkgs.just}/bin/just --justfile ${./airgap-menu.just} "$@"
+    '';
   in {
     nixosConfigurations = {
       airgap = nixos.lib.nixosSystem {
@@ -44,6 +47,9 @@
              # Needed by yubikey tools
              services.pcscd.enable = true;
 
+             # Enable mouse
+             services.gpm.enable = true;
+
              # Allow automatic `root` login
              users.users.root.hashedPassword = "";
              services.getty.autologinUser = "root";
@@ -54,26 +60,45 @@
 
                ninvaders
 
+               cryptsetup
+
                paperkey
 
                yubico-piv-tool
                yubikey-manager
                yubikey-personalization
 
+               airgap-menu
+
+               rsync
+               vim
              ];
 
+             programs.git = {
+               enable = true;
+               config = {
+                 user.email = "airgap@system";
+                 user.name = "Airgap System";
+               };
+             };
+
              environment.etc.profile.text = ''
+               export EDITOR=${pkgs.vim}/bin/vim
                # Interpret the RTC clock (just set by the user in the BIOS) in the
                # current time zone
                hwclock --hctosys --localtime
                hwclock --systohc --localtime
 
-               # Play a little game to enrich the entropy pool
-               ${pkgs.ninvaders}/bin/ninvaders
-
                clear
-               echo "Please check the date and time are correct"
+               echo "Check the date and time, and press Enter"
                date
+               read
+               echo "Play a game to feed the entropy pool"
+               read
+               ${pkgs.ninvaders}/bin/ninvaders
+               clear
+               echo "You can run 'airgap' to see a list of options"
+
              '';
 
              programs.gnupg.agent = {
@@ -89,7 +114,7 @@
 
     apps.x86_64-linux.default = let
       launch-iso = pkgs.writeScriptBin "launch-iso" ''
-        ${pkgs.qemu}/bin/qemu-system-x86_64 -enable-kvm -m 256 -cdrom ${self.nixosConfigurations.airgap.config.system.build.isoImage}/iso/airgap.iso
+        ${pkgs.qemu}/bin/qemu-system-x86_64 -enable-kvm -m 2048 -cdrom ${self.nixosConfigurations.airgap.config.system.build.isoImage}/iso/airgap.iso -hda /dev/sda
       '';
     in {
       type = "app";
