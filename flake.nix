@@ -114,7 +114,8 @@
 
     apps.x86_64-linux.default = let
       launch-iso = pkgs.writeScriptBin "launch-iso" ''
-        ${pkgs.qemu}/bin/qemu-system-x86_64 -enable-kvm -m 2048 -cdrom ${self.nixosConfigurations.airgap.config.system.build.isoImage}/iso/airgap.iso -hda /dev/sda
+        ${pkgs.qemu}/bin/qemu-system-x86_64 -enable-kvm -m 2048 -cdrom ${self.nixosConfigurations.airgap.config.system.build.isoImage}/iso/airgap.iso
+        # sudo ${pkgs.qemu}/bin/qemu-system-x86_64 -enable-kvm -m 2048 -cdrom ${self.nixosConfigurations.airgap.config.system.build.isoImage}/iso/airgap.iso -hda /dev/sda  # Enable thumbdrive
       '';
     in {
       type = "app";
