@@ -33,7 +33,7 @@
 
              isoImage.squashfsCompression = "gzip -Xcompression-level 1";
              # EFI booting
-             isoImage.makeEfiBootable = true;
+             isoImage.makeEfiBootable = false;
 
              # USB booting
              isoImage.makeUsbBootable = true;
