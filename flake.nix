@@ -61,6 +61,7 @@
                ninvaders
 
                cryptsetup
+               utillinux
 
                paperkey
 

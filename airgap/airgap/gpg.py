@@ -35,3 +35,13 @@ def restore(c):
         c.run("git fetch --all")
         c.run("git reset --hard origin/main")
         c.run("git clean -fd")
+
+
+@task
+def export_public_keys_to_sd(c):
+    c.run("echo 'type=0x0c' | sfdisk /dev/mmcblk0")
+    c.run("mkfs.vfat /dev/mmcblk0p1")
+    c.run("mkdir -p /tmp/sd")
+    c.run("mount /dev/mmcblk0p1 /tmp/sd")
+    c.run("gpg -a --export > /tmp/sd/pubkeys.pgp")
+    c.run("umount /tmp/sd")
