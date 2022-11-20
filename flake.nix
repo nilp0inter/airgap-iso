@@ -48,6 +48,8 @@
              # Enable mouse
              services.gpm.enable = true;
 
+             sound.enable = false;
+
              # Allow automatic `root` login
              users.users.root.hashedPassword = "";
              services.getty.autologinUser = "root";
@@ -75,13 +77,18 @@
              programs.git = {
                enable = true;
                config = {
+                 init.defaultBranch = "main";
                  user.email = "airgap@system";
                  user.name = "Airgap System";
                };
              };
 
              environment.etc.profile.text = ''
+               mkdir /mnt
+               ${airgap-menu}/bin/airgap gpg.init
+               source <(${airgap-menu}/bin/airgap --print-completion-script=bash)
                export EDITOR=${pkgs.vim}/bin/vim
+
                # Interpret the RTC clock (just set by the user in the BIOS) in the
                # current time zone
                hwclock --hctosys --localtime
@@ -91,9 +98,7 @@
                echo "Check the date and time, and press Enter"
                date
                read
-               echo "Play a game to feed the entropy pool"
-               read
-               ${pkgs.ninvaders}/bin/ninvaders
+               # ${pkgs.ninvaders}/bin/ninvaders
                clear
                echo "You can run 'airgap' to see a list of options"
 
@@ -112,8 +117,8 @@
 
     apps.x86_64-linux.default = let
       launch-iso = pkgs.writeScriptBin "launch-iso" ''
-        ${pkgs.qemu}/bin/qemu-system-x86_64 -enable-kvm -m 2048 -cdrom ${self.nixosConfigurations.airgap.config.system.build.isoImage}/iso/airgap.iso
-        # sudo ${pkgs.qemu}/bin/qemu-system-x86_64 -enable-kvm -m 2048 -cdrom ${self.nixosConfigurations.airgap.config.system.build.isoImage}/iso/airgap.iso -hda /dev/sda  # Enable thumbdrive
+        [ ! -f /tmp/airgap.drive ] && dd if=/dev/zero of=/tmp/airgap.drive bs=1M count=64
+        ${pkgs.qemu}/bin/qemu-system-x86_64 -enable-kvm -m 2048 -cdrom ${self.nixosConfigurations.airgap.config.system.build.isoImage}/iso/airgap.iso -hda /tmp/airgap.drive
       '';
     in {
       type = "app";
