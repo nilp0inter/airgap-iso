@@ -73,6 +73,7 @@
 
                rsync
                vim
+
              ];
 
              programs.git = {
@@ -109,6 +110,9 @@
                enable = true;
                pinentryFlavor = "tty";
              };
+
+             hardware.gpgSmartcards.enable = true;
+
            }
         ];
       };
