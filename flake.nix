@@ -122,6 +122,28 @@
 
              hardware.gpgSmartcards.enable = true;
 
+             # HP LaserJet 1100
+             services.printing = {
+               enable = true;
+               drivers = with pkgs; [
+                 gutenprint
+               ];
+             };
+             hardware.printers.ensureDefaultPrinter = "hpLaserJet1100";
+             hardware.printers.ensurePrinters = [
+               {
+                 name = "hpLaserJet1100";
+                 model = "gutenprint.5.3://hp-lj_1100/expert";
+                 description = "HP LaserJet 1100";
+                 deviceUri = "usb://HP/LaserJet%201100";
+                 ppdOptions = {
+                   PageSize = "A4";
+                   Resolution = "600dpi";
+                 };
+               }
+             ];
+
+             system.stateVersion = "22.05";
            }
         ];
       };

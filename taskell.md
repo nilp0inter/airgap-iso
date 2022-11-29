@@ -1,9 +1,9 @@
 ## To Do
 
-- Add printer export
 
 ## Doing
 
+- Add printer export
 
 ## Done
 
