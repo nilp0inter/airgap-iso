@@ -19,6 +19,14 @@
       });
     airgap-menu = pkgs.callPackage ./airgap {};
   in {
+    devShell.x86_64-linux = pkgs.mkShell {
+      buildInputs = [
+        pkgs.taskell
+      ];
+      inputsFrom = [
+        airgap-menu
+      ];
+    };
     nixosConfigurations = {
       airgap = nixos.lib.nixosSystem {
         system = "x86_64-linux";
