@@ -70,6 +70,7 @@
 
                cryptsetup
                utillinux
+               ssss
 
                paperkey
 

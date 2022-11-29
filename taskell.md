@@ -1,6 +1,5 @@
 ## To Do
 
-- Add ssss
 - Add printer export
 
 ## Doing
@@ -10,3 +9,4 @@
 
 - nix develop
 - direnv
+- Add ssss
