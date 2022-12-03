@@ -6,5 +6,7 @@ with pkgs.python3Packages; buildPythonApplication {
   doCheck = false;
   propagatedBuildInputs = [
     invoke
+    pyyaml
+    pkgs.ssss
   ];
 }
