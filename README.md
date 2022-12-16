@@ -14,3 +14,4 @@ $ nix build .
 $ sudo cp ./result/iso/airgap.iso /dev/<usbdrive>
 ```
 
+
