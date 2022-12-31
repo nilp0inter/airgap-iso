@@ -4,7 +4,7 @@
     url = "github:Duncaen/kbd-intl-ng";
     flake = false;
   };
-  inputs.nixos.url = "github:nixos/nixpkgs/nixos-22.05";
+  inputs.nixos.url = "github:nixos/nixpkgs/nixos-22.11";
   outputs = { self, nixos, kbd-intl-ng-repo }: let
     pkgs = nixos.legacyPackages.x86_64-linux;
     kbd-intl-ng = (pkgs.stdenv.mkDerivation rec {
@@ -56,6 +56,10 @@
              # Enable mouse
              services.gpm.enable = true;
 
+             # Enable Infinite Noise TRNG
+             services.infnoise.enable = true;
+             services.infnoise.fillDevRandom = true;
+
              sound.enable = false;
 
              # Allow automatic `root` login
@@ -67,11 +71,13 @@
                kbd-intl-ng
 
                ninvaders
+               infnoise
 
                cryptsetup
                utillinux
                ssss
 
+               enscript
                paperkey
 
                yubico-piv-tool
@@ -154,7 +160,7 @@
     apps.x86_64-linux.default = let
       launch-iso = pkgs.writeScriptBin "launch-iso" ''
         [ ! -f /tmp/airgap.drive ] && dd if=/dev/zero of=/tmp/airgap.drive bs=1M count=64
-        ${pkgs.qemu}/bin/qemu-system-x86_64 -enable-kvm -m 2048 -cdrom ${self.nixosConfigurations.airgap.config.system.build.isoImage}/iso/airgap.iso -hda /tmp/airgap.drive
+        ${pkgs.qemu}/bin/qemu-system-x86_64 -device qemu-xhci,id=xhci -device usb-host,bus=xhci.0,vendorid=0x0403,productid=0x6015 -enable-kvm -m 2048 -cdrom ${self.nixosConfigurations.airgap.config.system.build.isoImage}/iso/airgap.iso -hda /tmp/airgap.drive
       '';
     in {
       type = "app";
