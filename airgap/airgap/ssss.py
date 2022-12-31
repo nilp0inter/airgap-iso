@@ -18,8 +18,8 @@ def split(c, secrets_yaml, threshold=3, shares=5):
         secrets = yaml.load(secretfile, yaml.SafeLoader)
         for key, secret in secrets.items():
             try:
-                secret = secret.encode('ascii')
-                assert len(secret) <= 128
+                secret = secret.ljust(128, " ").encode('ascii')
+                assert len(secret) == 128
             except UnicodeEncodeError as exc:
                 raise ValueError("secret MUST be an ASCII string of max 128 characters") from exc
             proc = subprocess.Popen(
