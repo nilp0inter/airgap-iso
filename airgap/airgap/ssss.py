@@ -6,7 +6,6 @@ from invoke import task, run
 
 from airgap import check
 
-SSSS_SPLIT = "/nix/store/jwdnxm8hnis5cgp9f5nwnyscmww6b3aj-ssss-0.5.7/bin/ssss-split"
 
 @task
 def split(c, secrets_yaml, threshold=3, shares=5):
@@ -23,10 +22,11 @@ def split(c, secrets_yaml, threshold=3, shares=5):
             except UnicodeEncodeError as exc:
                 raise ValueError("secret MUST be an ASCII string of max 128 characters") from exc
             proc = subprocess.Popen(
-                [SSSS_SPLIT, "-n", str(shares), "-t", str(threshold), "-Q"],
+                ["ssss-split", "-n", str(shares), "-t", str(threshold), "-Q"],
                 stdin=subprocess.PIPE,
                 stdout=subprocess.PIPE,
-                stderr=subprocess.DEVNULL)
+                stderr=subprocess.DEVNULL,
+                shell=True)
             stdout, _ = proc.communicate(secret)
             chunks = stdout.decode('ascii').splitlines()
             for i, c in enumerate(chunks):
