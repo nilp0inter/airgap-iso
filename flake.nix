@@ -4,7 +4,7 @@
     url = "github:Duncaen/kbd-intl-ng";
     flake = false;
   };
-  inputs.nixos.url = "github:nixos/nixpkgs/nixos-22.11";
+  inputs.nixos.url = "github:nixos/nixpkgs/nixos-24.11";
   outputs = { self, nixos, kbd-intl-ng-repo }: let
     pkgs = nixos.legacyPackages.x86_64-linux;
     kbd-intl-ng = (pkgs.stdenv.mkDerivation rec {
@@ -21,7 +21,6 @@
   in {
     devShell.x86_64-linux = pkgs.mkShell {
       buildInputs = [
-        pkgs.taskell
       ];
       inputsFrom = [
         airgap-menu
@@ -59,8 +58,6 @@
              # Enable Infinite Noise TRNG
              services.infnoise.enable = true;
              services.infnoise.fillDevRandom = true;
-
-             sound.enable = false;
 
              # Allow automatic `root` login
              users.users.root.hashedPassword = "";
@@ -123,7 +120,7 @@
 
              programs.gnupg.agent = {
                enable = true;
-               pinentryFlavor = "tty";
+               pinentryPackage = pkgs.pinentry-tty;
              };
 
              hardware.gpgSmartcards.enable = true;
